@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CacheInterface meta.Interface = "nori/cache/Cache@0.2.0"
+	CacheInterface meta.Interface = "nori/cache/Cache@1.0.0"
 )
 
 type Cache interface {
