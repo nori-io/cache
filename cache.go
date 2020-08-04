@@ -2,33 +2,34 @@ package cache
 
 import (
 	"time"
-
-	"github.com/nori-io/nori-common/v2/errors"
-	"github.com/nori-io/nori-common/v2/meta"
-	"github.com/nori-io/nori-common/v2/plugin"
 )
 
-const (
-	CacheInterface meta.Interface = "nori/cache/Cache@1.0.0"
-)
 
-type Cache interface {
-	Clear() error
-	Delete(key []byte) error
-	Get(key []byte) ([]byte, error)
-	Set(key []byte, value []byte, _ time.Duration) error
+
+func (i *instance) Clear() error {
+	i.cache = make(inMemType)
+	return nil
 }
 
-func GetCache(r plugin.Registry) (Cache, error) {
-	instance, err := r.Interface(CacheInterface)
-	if err != nil {
-		return nil, err
+func (i *instance) Delete(key []byte) error {
+	k := string(key)
+	if _, ok := i.cache[k]; ok {
+		delete(i.cache, k)
+		return nil
+	} else {
+		return nil
 	}
-	i, ok := instance.(Cache)
-	if !ok {
-		return nil, errors.InterfaceAssertError{
-			Interface: CacheInterface,
-		}
+}
+
+func (i instance) Get(key []byte) ([]byte, error) {
+	if val, ok := i.cache[string(key)]; ok {
+		return val, nil
+	} else {
+		return nil, nil
 	}
-	return i, nil
+}
+
+func (i *instance) Set(key []byte, value []byte, _ time.Duration) error {
+	i.cache[string(key)] = value
+	return nil
 }
