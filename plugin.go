@@ -31,7 +31,7 @@ func (p *service) Instance() interface{} {
 	return p.instance
 }
 
-func (p service) Meta() meta.Meta {
+func (p *service) Meta() meta.Meta {
 	return &meta.Data{
 		ID: meta.ID{
 			ID:      "nori/cache/memory",
@@ -61,7 +61,7 @@ func (p service) Meta() meta.Meta {
 
 }
 
-func (p service) Start(ctx context.Context, registry plugin.Registry) error {
+func (p *service) Start(ctx context.Context, registry plugin.Registry) error {
 	if p.instance == nil {
 		instance := &instance{
 			cache: make(inMemType),
@@ -71,7 +71,7 @@ func (p service) Start(ctx context.Context, registry plugin.Registry) error {
 	return nil
 }
 
-func (p service) Stop(ctx context.Context, registry plugin.Registry) error {
+func (p *service) Stop(ctx context.Context, registry plugin.Registry) error {
 	p.instance = nil
 	return nil
 }
