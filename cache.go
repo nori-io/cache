@@ -1,10 +1,8 @@
-package cache
+package main
 
 import (
 	"time"
 )
-
-
 
 func (i *instance) Clear() error {
 	i.cache = make(inMemType)

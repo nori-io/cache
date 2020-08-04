@@ -1,12 +1,12 @@
-package cache
+package main
 
 import (
 	"context"
-	cfg "github.com/nori-io/common/v3/config"
+	"github.com/nori-io/common/v3/config"
+	"github.com/nori-io/common/v3/logger"
 	"github.com/nori-io/common/v3/meta"
-	noriPlugin "github.com/nori-io/common/v3/plugin"
+	"github.com/nori-io/common/v3/plugin"
 	"github.com/nori-io/interfaces/cache"
-	"plugin"
 )
 
 type service struct {
@@ -19,15 +19,11 @@ type instance struct {
 	cache inMemType
 }
 
-
 var (
 	Plugin plugin.Plugin = &service{}
 )
 
-
-func (p *service) Init(_ context.Context, configManager cfg.Manager) error {
-	p.instance = &instance{}
-	p.instance.cache =make(inMemType)
+func (p *service) Init(_ context.Context, config config.Config, log logger.FieldLogger) error {
 	return nil
 }
 
@@ -37,45 +33,45 @@ func (p *service) Instance() interface{} {
 
 func (p service) Meta() meta.Meta {
 	return &meta.Data{
-
 		ID: meta.ID{
 			ID:      "nori/cache/memory",
 			Version: "1.0.0",
 		},
 		Author: meta.Author{
-			Name: "Nori",
-			URI:  "https://nori.io",
+			Name: "Nori.io",
+			URI:  "https://nori.io/",
 		},
 		Core: meta.Core{
-			VersionConstraint: ">=1.0.0, <2.0.0",
+			VersionConstraint: "=0.2.0",
 		},
 		Dependencies: []meta.Dependency{},
 		Description: meta.Description{
-			Name: "Nori: Cache In Memory",
+			Name:        "Nori: Cache In Memory",
+			Description: "",
 		},
-		Interface:cache.CacheInterface ,
-		License: meta.License{
-			Title: "",
-			Type:  "GPLv3",
-			URI:   "https://www.gnu.org/licenses/"},
+		Interface: cache.CacheInterface,
+		License: []meta.License{
+			{
+				Title: "GPLv3",
+				Type:  "GPLv3",
+				URI:   "https://www.gnu.org/licenses/"},
+		},
 		Tags: []string{"cache", "memory"},
 	}
 
 }
 
-func (p service) Start(ctx context.Context, registry noriPlugin.Registry) error {
+func (p service) Start(ctx context.Context, registry plugin.Registry) error {
 	if p.instance == nil {
 		instance := &instance{
 			cache: make(inMemType),
 		}
-
 		p.instance = instance
 	}
 	return nil
 }
 
-func (p service) Stop(_ context.Context, _ noriPlugin.Registry) error {
+func (p service) Stop(ctx context.Context, registry plugin.Registry) error {
 	p.instance = nil
 	return nil
 }
-
