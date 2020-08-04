@@ -27,7 +27,7 @@ func (i instance) Get(key []byte) ([]byte, error) {
 	}
 }
 
-func (i *instance) Set(key []byte, value []byte, _ time.Duration) error {
+func (i *instance) Set(key []byte, value []byte, ttl time.Duration) error {
 	i.cache[string(key)] = value
 	return nil
 }

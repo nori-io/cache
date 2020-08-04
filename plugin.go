@@ -23,7 +23,7 @@ var (
 	Plugin plugin.Plugin = &service{}
 )
 
-func (p *service) Init(_ context.Context, config config.Config, log logger.FieldLogger) error {
+func (p *service) Init(ctx context.Context, config config.Config, log logger.FieldLogger) error {
 	return nil
 }
 
