@@ -31,7 +31,7 @@ func (i *Instance) Delete(key []byte) error {
 	}
 }
 
-func (i Instance) Get(key []byte) ([]byte, error) {
+func (i *Instance) Get(key []byte) ([]byte, error) {
 	if val, ok := i.cache[string(key)]; ok {
 		return val, nil
 	} else {
