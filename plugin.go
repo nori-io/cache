@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	cacheInstance "github.com/nori-io/cache-memory/internal/cache"
+	memcache "github.com/nori-io/cache-memory/internal/cache"
 	"github.com/nori-io/common/v3/config"
 	"github.com/nori-io/common/v3/logger"
 	"github.com/nori-io/common/v3/meta"
@@ -12,7 +12,7 @@ import (
 )
 
 type service struct {
-	instance *cacheInstance.Instance
+	instance *memcache.Instance
 }
 
 var (
@@ -59,9 +59,7 @@ func (p *service) Meta() meta.Meta {
 
 func (p *service) Start(ctx context.Context, registry plugin.Registry) error {
 	if p.instance == nil {
-		instance := &cacheInstance.Instance{
-			Cache: make(cacheInstance.InMemType),
-		}
+		instance := memcache.New()
 		p.instance = instance
 	}
 	return nil
