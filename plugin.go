@@ -2,21 +2,17 @@ package main
 
 import (
 	"context"
+
+	cacheInstance "github.com/nori-io/cache-memory/internal/cache"
 	"github.com/nori-io/common/v3/config"
 	"github.com/nori-io/common/v3/logger"
 	"github.com/nori-io/common/v3/meta"
 	"github.com/nori-io/common/v3/plugin"
-	"github.com/nori-io/interfaces/cache"
+	"github.com/nori-io/interfaces/nori/cache"
 )
 
 type service struct {
-	instance *instance
-}
-
-type inMemType map[string][]byte
-
-type instance struct {
-	cache inMemType
+	instance *cacheInstance.Instance
 }
 
 var (
@@ -63,8 +59,8 @@ func (p *service) Meta() meta.Meta {
 
 func (p *service) Start(ctx context.Context, registry plugin.Registry) error {
 	if p.instance == nil {
-		instance := &instance{
-			cache: make(inMemType),
+		instance := &cacheInstance.Instance{
+			Cache: make(cacheInstance.InMemType),
 		}
 		p.instance = instance
 	}
